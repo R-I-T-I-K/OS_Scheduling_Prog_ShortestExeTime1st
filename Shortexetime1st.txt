@@ -1,0 +1,78 @@
+#include<iostream>
+using namespace std;
+main()
+{
+	int n,T=3,l=0,CT=3,j=0;
+	int AT[10],BT[10],RT[10],TAT[10],WT[10];
+	int lbt=INT_MAX;
+	float TTAT=0,TWT=0;
+	bool counter=false;
+	cout<<"\n\n\n\t\t\t\t\tEnter the number of processes : ";
+	cin>>n;
+	cout<<"\n";
+	for(int i=0;i<n;i++)
+	{
+		cout<<"\t\tEnter the arrival time and burst time of process "<<i+1<<" respectively.\n";
+		cout<<"\t\t\tArrival Time : ";
+		cin>>AT[i];
+		cout<<"\t\t\tBurst Time   : ";
+		cin>>BT[i];
+		RT[i]=BT[i];
+		if((AT[i]<3)||(BT[i]>10))
+		{	
+			cout<<"\n\t\tInvalid input...Arrival Time should be more than 3 Time Units AND"
+				<<" Burst Time should be less than 10 Time Units.\n";
+				i--;
+		}
+	}
+	system("cls");
+	cout<<"\n\n\n\t\tComputing Average Waiting Time And Turn Around Time...";
+	cout<<"\n\n\n\tQueue of order of execution of all processes(1 Time Unit Each) : \n\t\t|";
+	while(j<n)
+    {	a:
+		for(int i=0;i<n;i++)
+		{
+			if((AT[i]<=T)&&(RT[i]<lbt)&&(RT[i]>0))
+			{
+				lbt=RT[i];
+				l=i; 
+				counter=true;
+			}
+		}
+    	if(counter==false)
+    	{
+    		T++;
+    		goto a;
+    	}
+    	cout<<"P"<<l+1<<"|";
+    	RT[l]--;
+    	lbt=RT[l];
+    	if (lbt == 0) 
+		{
+			lbt = INT_MAX;
+		}
+		if(RT[l]==0)
+		{
+			j++;
+			counter=false;
+			CT=T+1;
+			WT[l]=CT-BT[l]-AT[l];
+    		if (WT[l] < 0)
+			{ 
+				WT[l] = 0; 
+			}
+		}
+		T++;
+	}
+	cout<<"\n\n\t\tProcess\t\tAT\t\tBT\t\tWT\t\tTAT\n";
+	cout<<"\t\t-------------------------------------------------------------------\n";
+	for(int i=0;i<n;i++)
+	{
+		TAT[i]=BT[i]+WT[i];
+		cout<<"\t\t"<<i+1<<"\t\t"<<AT[i]<<"\t\t"<<BT[i]<<"\t\t"<<WT[i]<<"\t\t"<<TAT[i]<<"\n";
+		TTAT=TTAT+TAT[i];
+		TWT =TWT +WT[i] ;	
+	}
+	cout<<"\n\t\tAverage Waiting Time is     : "<<TWT/n;;
+	cout<<"\n\t\tAverage Turn Around Time is : "<<TTAT/n<<"\n";;
+}
